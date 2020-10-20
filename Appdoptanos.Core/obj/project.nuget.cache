@@ -1,0 +1,11 @@
+{
+  "version": 2,
+  "dgSpecHash": "6z3BM+tpf+DTTB0mFq4X8ZUPl0VZ3QJnW6cJ00cRjk+MvJS2FCmTXeLmt0sEw8n2tMxeUD2c1X0CY1glOqA2Xg==",
+  "success": true,
+  "projectFilePath": "C:\\Users\\villarealnah\\source\\repos\\Appdoptanos\\Appdoptanos.Core\\Appdoptanos.Core.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\villarealnah\\.nuget\\packages\\microsoft.netcore.platforms\\1.1.0\\microsoft.netcore.platforms.1.1.0.nupkg.sha512",
+    "C:\\Users\\villarealnah\\.nuget\\packages\\netstandard.library\\2.0.3\\netstandard.library.2.0.3.nupkg.sha512"
+  ],
+  "logs": []
+}
