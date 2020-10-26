@@ -294,7 +294,6 @@ C:\Users\villarealnah\Desktop\Fuentes proyectos propios\Appdoptanos\Appdoptanos.
 C:\Users\villarealnah\Desktop\Fuentes proyectos propios\Appdoptanos\Appdoptanos.Api\bin\Debug\netcoreapp3.1\runtimes\unix\lib\netcoreapp2.0\System.Runtime.Caching.dll
 C:\Users\villarealnah\Desktop\Fuentes proyectos propios\Appdoptanos\Appdoptanos.Api\bin\Debug\netcoreapp3.1\runtimes\win\lib\netcoreapp2.0\System.Runtime.Caching.dll
 C:\Users\villarealnah\Desktop\Fuentes proyectos propios\Appdoptanos\Appdoptanos.Api\bin\Debug\netcoreapp3.1\runtimes\win\lib\netstandard2.0\System.Security.Cryptography.ProtectedData.dll
-C:\Users\villarealnah\Desktop\Fuentes proyectos propios\Appdoptanos\Appdoptanos.Api\obj\Debug\netcoreapp3.1\Appdoptanos.Api.csprojAssemblyReference.cache
 C:\Users\villarealnah\Desktop\Fuentes proyectos propios\Appdoptanos\Appdoptanos.Api\obj\Debug\netcoreapp3.1\Appdoptanos.Api.AssemblyInfoInputs.cache
 C:\Users\villarealnah\Desktop\Fuentes proyectos propios\Appdoptanos\Appdoptanos.Api\obj\Debug\netcoreapp3.1\Appdoptanos.Api.AssemblyInfo.cs
 C:\Users\villarealnah\Desktop\Fuentes proyectos propios\Appdoptanos\Appdoptanos.Api\obj\Debug\netcoreapp3.1\Appdoptanos.Api.csproj.CoreCompileInputs.cache
@@ -306,3 +305,4 @@ C:\Users\villarealnah\Desktop\Fuentes proyectos propios\Appdoptanos\Appdoptanos.
 C:\Users\villarealnah\Desktop\Fuentes proyectos propios\Appdoptanos\Appdoptanos.Api\obj\Debug\netcoreapp3.1\Appdoptanos.Api.dll
 C:\Users\villarealnah\Desktop\Fuentes proyectos propios\Appdoptanos\Appdoptanos.Api\obj\Debug\netcoreapp3.1\Appdoptanos.Api.pdb
 C:\Users\villarealnah\Desktop\Fuentes proyectos propios\Appdoptanos\Appdoptanos.Api\obj\Debug\netcoreapp3.1\Appdoptanos.Api.genruntimeconfig.cache
+C:\Users\villarealnah\Desktop\Fuentes proyectos propios\Appdoptanos\Appdoptanos.Api\obj\Debug\netcoreapp3.1\Appdoptanos.Api.csprojAssemblyReference.cache
