@@ -14,12 +14,15 @@ namespace Appdoptanos.Api.Controllers
     [ApiController]
     public class AnimalsController : ControllerBase
     {
+
+        //Esta clase  representa la bd
         private readonly MyDbContext _context;
 
         public AnimalsController(MyDbContext context)
         {
             _context = context;
         }
+
 
         //Trae todos los animales
         // GET: api/Animals
@@ -47,7 +50,7 @@ namespace Appdoptanos.Api.Controllers
             {
                 lstAnimalDTO.Add(new AnimalDTO
                 {
-                    IdAnimal = animalbd.IdAnimal,
+                    //IdAnimal = animalbd.IdAnimal,
                     Nombre = animalbd.Nombre,
                     Color = animalbd.Color,
                     FecNac = animalbd.FecNac,
@@ -90,7 +93,7 @@ namespace Appdoptanos.Api.Controllers
             {
                 lstAnimalDTO.Add(new AnimalDTO
                 {
-                    IdAnimal = animalbd.IdAnimal,
+                    //IdAnimal = animalbd.IdAnimal,
                     Nombre = animalbd.Nombre,
                     Color = animalbd.Color,
                     FecNac = animalbd.FecNac,
@@ -105,7 +108,7 @@ namespace Appdoptanos.Api.Controllers
             return objectResult;
         }
 
-        //Trae animales por id
+        //Trae animal por id
         // GET: api/Animals/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Animal>> GetAnimal(int id)
@@ -130,7 +133,7 @@ namespace Appdoptanos.Api.Controllers
                 //Transformo la consulta al DTO
                 AnimalDTO animalDTO = new AnimalDTO
                 {
-                    IdAnimal = animalBd.IdAnimal,
+                    //IdAnimal = animalBd.IdAnimal,
                     Nombre = animalBd.Nombre,
                     Color = animalBd.Color,
                     FecNac = animalBd.FecNac,
@@ -149,12 +152,35 @@ namespace Appdoptanos.Api.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> PutAnimal(int id, AnimalDTO animalDTO)
         {
-            if (id != animalDTO.IdAnimal)
-            {
-                return BadRequest();
-            }
+            //if (id != animalDTO.IdAnimal)
+            //{
+            //    return BadRequest();
+            //}
 
-            _context.Entry(animalDTO).State = EntityState.Modified;
+            //Busco la especie del animal ingresado para inicializar luego en el EspecieModel
+            var especieQuery =
+             (from especie in _context.Especie
+              where especie.NombreEspecie == animalDTO.Nombre
+              select new
+              {
+                  NombreEspecie = especie.NombreEspecie,
+                  IdEspecie = especie.IdEspecie
+              }).FirstOrDefault();
+
+
+
+            //Tengo que convertir el animalDTO en AnimalModel
+            Animal animalBd = new Animal {
+                //IdAnimal = animalDTO.IdAnimal,
+                Nombre = animalDTO.Nombre,
+                Color = animalDTO.Color,
+                FecNac = animalDTO.FecNac,
+                Especie = new Especie{NombreEspecie = especieQuery.NombreEspecie,IdEspecie = especieQuery.IdEspecie},
+                Disponibilidad = animalDTO.Disponibilidad
+            };
+
+            //Guardo el AnimalModel
+            _context.Entry(animalBd).State = EntityState.Modified;
 
             try
             {
@@ -162,16 +188,13 @@ namespace Appdoptanos.Api.Controllers
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!AnimalExists(id))
-                {
-                    return NotFound();
-                }
+                if (!AnimalExists(id) && especieQuery != null)
+                    return NotFound("No se encontro el animal ingresado");
+                if (especieQuery == null)
+                    return NotFound("No se encontro la especie ingresada");
                 else
-                {
                     throw;
-                }
             }
-
             return NoContent();
         }
 
@@ -181,23 +204,57 @@ namespace Appdoptanos.Api.Controllers
         [HttpPost]
         public async Task<ActionResult<Animal>> PostAnimal(AnimalDTO animalDTO)
         {
+            //Esta linea de abajo no va a funcionar porque yo cuando mando el DTO desde el front envio solo el nombre de la especia, asi que en el back deberia buscar el id de la especia
+            //Especie especie = await _context.Especie.FindAsync(animalDTO.Especie);
 
-            Especie especie = await _context.Especie.FindAsync(animalDTO.Especie);
+            //Busco si el nombre de especie ingresado en el dto a ver si existe
+            var especieQuery =
+               (from especie in _context.Especie
+                where especie.NombreEspecie == animalDTO.Especie
+                select new
+                {
+                    NombreEspecie = especie.NombreEspecie,
+                    IdEspecie = especie.IdEspecie
+                }).FirstOrDefault();
+            //Creo el Model para llenarlo con los datos del DTO y posterior insertar
+            Animal animalModel = new Animal();
 
-            Animal animalModel = new Animal
+            if (especieQuery != null)
             {
-                IdAnimal = animalDTO.IdAnimal,
-                Nombre = animalDTO.Nombre,
-                Color = animalDTO.Color,
-                FecNac = animalDTO.FecNac,
-                Especie = especie,
-                Disponibilidad = animalDTO.Disponibilidad
-            };
+                animalModel = new Animal
+                {
+                    //IdAnimal = animalDTO.IdAnimal,
+                    Nombre = animalDTO.Nombre,
+                    Color = animalDTO.Color,
+                    FecNac = animalDTO.FecNac,
+                    Especie = new Especie { NombreEspecie = especieQuery.NombreEspecie, IdEspecie = especieQuery.IdEspecie },
+                    Disponibilidad = true
+                };
+            }
+            else
+            {
+                return NotFound("No se encontro la especie ingresada");
 
-            _context.Animal.Add(animalModel);
-            await _context.SaveChangesAsync();
+            }
+           
+            //Uso atach en lugar de Add porque: Add inserta en las tablas relacionada los valores que yo ingrese como si fueran nuevos, en cambio atach solo inserta en la tabla donde quiero insertar valores principalmente.
+            _context.Animal.Attach(animalModel);
 
-            return CreatedAtAction("GetAnimal", new { id = animalModel.IdAnimal }, animalModel);
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (Exception)
+            {
+                    throw;
+            }
+            return CreatedAtAction("GetAnimal", new { id = animalModel.IdAnimal }, new AnimalDTO { Nombre = animalModel.Nombre,
+                                                                                                    Color = animalModel.Color,
+                                                                                                    FecNac = animalModel.FecNac,
+                                                                                                    Especie = animalModel.Nombre,
+                                                                                                    //Disponibilidad = animalModel.Disponibilidad
+                                                                                                    });
+
         }
 
         // DELETE: api/Animals/5
@@ -209,7 +266,7 @@ namespace Appdoptanos.Api.Controllers
             {
                 return NotFound();
             }
-
+            //Revisar pruebas a ver si elimina tambien la especie al eliminar el animal
             _context.Animal.Remove(animal);
             await _context.SaveChangesAsync();
 
