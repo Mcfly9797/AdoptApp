@@ -37,40 +37,25 @@ namespace Appdoptanos.Api.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Animal>>> GetAnimal()
         {
-            ObjectResult objectResult;
+            var lstAnimalBD = await (from animal in _context.Animal
+                                      select new
+                                      {
+                                          animal.IdAnimal,
+                                          animal.Nombre,
+                                          animal.Color,
+                                          animal.FecNac,
+                                          animal.Especie.NombreEspecie,
+                                          animal.Disponibilidad
+                                      }).ToListAsync();
 
-            var query =
-            from animal in _context.Animal
-            select new
-            {
-                //IdAnimal = animal.IdAnimal,
-                Nombre = animal.Nombre,
-                Color = animal.Color,
-                FecNac = animal.FecNac,
-                NombreEspecie = animal.Especie.NombreEspecie,
-                Disponibilidad = animal.Disponibilidad
-            };
-
-            var lstAnimalBD = await query.ToListAsync();
             var lstAnimalDTO = new List<AnimalDTO>();
-
-            foreach (var animalbd in lstAnimalBD)
-            {
-                lstAnimalDTO.Add(new AnimalDTO
-                {
-                    //IdAnimal = animalbd.IdAnimal,
-                    Nombre = animalbd.Nombre,
-                    Color = animalbd.Color,
-                    FecNac = animalbd.FecNac,
-                    NombreEspecie = animalbd.NombreEspecie,
-                    Disponibilidad = animalbd.Disponibilidad
-                });
-            }
+            foreach (var animalBd in lstAnimalBD)
+                lstAnimalDTO.Add(AnimalToDTO(animalBd));
+            
             if (lstAnimalDTO.Count != 0)
-                objectResult = Ok(lstAnimalDTO);
+                return Ok(lstAnimalDTO);
             else
-                objectResult = NotFound("No se encuentran datos");
-            return objectResult;
+                return NotFound("No se encuentran datos");
         }
 
 
@@ -81,41 +66,26 @@ namespace Appdoptanos.Api.Controllers
         [HttpGet("Disponibles")]
         public async Task<ActionResult<IEnumerable<AnimalDTO>>> GetAvailableAnimal()
         {
-            ObjectResult objectResult;
+            var lstAnimalBD = await (from animal in _context.Animal
+                                     where animal.Disponibilidad == true
+                                     select new
+                                     {
+                                         animal.IdAnimal,
+                                         animal.Nombre,
+                                         animal.Color,
+                                         animal.FecNac,
+                                         animal.Especie.NombreEspecie,
+                                         animal.Disponibilidad
+                                     }).ToListAsync();
 
-            var query =
-            from animal in _context.Animal
-            where animal.Disponibilidad == true
-            select new
-            {
-                //IdAnimal = animal.IdAnimal,
-                Nombre = animal.Nombre,
-                Color = animal.Color,
-                FecNac = animal.FecNac,
-                NombreEspecie = animal.Especie.NombreEspecie,
-                Disponibilidad = animal.Disponibilidad
-            };
-
-            var lstAnimalBD = await query.ToListAsync();
             var lstAnimalDTO = new List<AnimalDTO>();
+            foreach (var animalBd in lstAnimalBD)
+                 lstAnimalDTO.Add(AnimalToDTO(animalBd));
 
-            foreach (var animalbd in lstAnimalBD)
-            {
-                lstAnimalDTO.Add(new AnimalDTO
-                {
-                    //IdAnimal = animalbd.IdAnimal,
-                    Nombre = animalbd.Nombre,
-                    Color = animalbd.Color,
-                    FecNac = animalbd.FecNac,
-                    NombreEspecie = animalbd.NombreEspecie,
-                    Disponibilidad = animalbd.Disponibilidad
-                });
-            }
             if (lstAnimalDTO.Count != 0)
-                objectResult = Ok(lstAnimalDTO);
+                return  Ok(lstAnimalDTO);
             else
-                objectResult = NotFound("No hay animales disponibles para adoptar");
-            return objectResult;
+                return NotFound("No hay animales disponibles para adoptar");
         }
 
 
@@ -126,35 +96,21 @@ namespace Appdoptanos.Api.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<AnimalDTO>> GetAnimal(int id)
         {
-            var query =
-              from animal in _context.Animal
-              where animal.IdAnimal == id
-              select new
-              {
-                  animal.IdAnimal,
-                  animal.Nombre,
-                  animal.Color,
-                  animal.FecNac,
-                  animal.Especie.NombreEspecie,
-                  animal.Disponibilidad
-              };
-
-            var animalBd = await query.FirstOrDefaultAsync();
+            var animalBd = await (from animal in _context.Animal
+                                  where animal.IdAnimal == id
+                                  select new
+                                 {
+                                     animal.IdAnimal,
+                                     animal.Nombre,
+                                     animal.Color,
+                                     animal.FecNac,
+                                     animal.Especie.NombreEspecie,
+                                     animal.Disponibilidad
+                                 }).FirstOrDefaultAsync();
 
             if (animalBd != null)
-            {
-                //Transformo la consulta al DTO
-                AnimalDTO animalDTO = new AnimalDTO
-                {
-                    IdAnimal = animalBd.IdAnimal,
-                    Nombre = animalBd.Nombre,
-                    Color = animalBd.Color,
-                    FecNac = animalBd.FecNac,
-                    NombreEspecie = animalBd.NombreEspecie,
-                    Disponibilidad = animalBd.Disponibilidad
-                };
-                return Ok(animalDTO);
-            }
+                //Transformo la consulta al DTO y lo devuelvo
+                return Ok(AnimalToDTO(animalBd));
             return NotFound("No hay animales con ese id"); ;
         }
 
@@ -169,19 +125,13 @@ namespace Appdoptanos.Api.Controllers
         public async Task<IActionResult> PutAnimal(int id, AnimalDTO animalDTO)
         {
             if (id != animalDTO.IdAnimal)
-            {
                 return BadRequest();
-            }
 
             //Busco si el nombre de especie ingresado en el dto a ver si existe
             var especieQuery =
                (from especie in _context.Especie
                 where especie.NombreEspecie == animalDTO.NombreEspecie
-                select new
-                {
-                    NombreEspecie = especie.NombreEspecie,
-                    IdEspecie = especie.IdEspecie
-                }).FirstOrDefaultAsync();
+                select especie).FirstOrDefaultAsync();
             
             //Creo el Model para llenarlo con los datos del DTO y posterior insertar
             Animal animalModel = new Animal();
@@ -235,14 +185,10 @@ namespace Appdoptanos.Api.Controllers
         public async Task<ActionResult<AnimalDTO>> PostAnimal(AnimalDTO animalDTO)
         {
             //Busco si el nombre de especie ingresado en el dto a ver si existe
-            var especieQuery =
-               (from especie in _context.Especie
-                where especie.NombreEspecie == animalDTO.NombreEspecie
-                select new
-                {
-                    NombreEspecie = especie.NombreEspecie,
-                    IdEspecie = especie.IdEspecie
-                }).FirstOrDefaultAsync();
+            var especieQuery = (await    (from especie in _context.Especie
+                                            where especie.NombreEspecie == animalDTO.NombreEspecie
+                                            select especie)
+                                            .FirstOrDefaultAsync());
 
             //Creo el Model para llenarlo con los datos del DTO y posterior insertar
             Animal animalModel = new Animal();
@@ -256,8 +202,7 @@ namespace Appdoptanos.Api.Controllers
                                     Nombre = animalDTO.Nombre,
                                     Color = animalDTO.Color,
                                     FecNac = animalDTO.FecNac,
-                                    EspecieId = especieQuery.Result.IdEspecie,
-                                    //Especie = new Especie { NombreEspecie = especieQuery.Result.NombreEspecie, IdEspecie = especieQuery.Result.IdEspecie },
+                                    EspecieId = especieQuery.IdEspecie,
                                     Disponibilidad = true
                                 };
             }
@@ -275,13 +220,14 @@ namespace Appdoptanos.Api.Controllers
             {
                     throw;
             }
-            return CreatedAtAction("GetAnimal", new { id = animalModel.IdAnimal }, new AnimalDTO {  IdAnimal = animalModel.IdAnimal,
-                                                                                                    Nombre = animalModel.Nombre,
-                                                                                                    Color = animalModel.Color,
-                                                                                                    FecNac = animalModel.FecNac,
-                                                                                                    NombreEspecie = animalModel.Nombre,
-                                                                                                    Disponibilidad = animalModel.Disponibilidad
-                                                                                                    });
+        return CreatedAtAction("GetAnimal", new { id = animalModel.IdAnimal },  new {
+                                                                                        //IdAnimal = animalDTO.IdAnimal,
+                                                                                        Nombre = animalDTO.Nombre,
+                                                                                        Color = animalDTO.Color,
+                                                                                        FecNac = animalDTO.FecNac,
+                                                                                        NombreEspecie = animalDTO.NombreEspecie,
+                                                                                        Disponibilidad = true
+                                                                                    });
         }
 
 
@@ -311,9 +257,15 @@ namespace Appdoptanos.Api.Controllers
             {
                 await _context.SaveChangesAsync();
                 return Ok(JsonConvert.SerializeObject( new { 
-                                                            Menssage = "Se elimino el siguiente elemento",
-                                                            Elemento = animalDTO}
-                                                            ));
+                                                            Menssage = "Se elimino el siguiente elemento: ",
+                                                            Elemento = new{
+                                                                            IdAnimal = animalDTO.IdAnimal,
+                                                                            Nombre = animalDTO.Nombre,
+                                                                            Color = animalDTO.Color,
+                                                                            FecNac = animalDTO.FecNac,
+                                                                            NombreEspecie = animalDTO.NombreEspecie
+                                                                           }
+                                                            }));
             }
             catch (Exception)
             {
@@ -329,5 +281,16 @@ namespace Appdoptanos.Api.Controllers
         {
             return _context.Animal.Any(e => e.IdAnimal == id);
         }
+
+        private static AnimalDTO AnimalToDTO(dynamic animalBd) =>
+             new AnimalDTO
+            {
+                IdAnimal = animalBd.IdAnimal,
+                Nombre = animalBd.Nombre,
+                Color = animalBd.Color,
+                FecNac = animalBd.FecNac,
+                NombreEspecie = animalBd.NombreEspecie,
+                Disponibilidad = animalBd.Disponibilidad
+            };
     }
 }
