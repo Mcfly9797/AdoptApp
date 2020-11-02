@@ -8,21 +8,25 @@ namespace Appdoptanos.Api.DTOs
 
     public class AdopcionDTO
     {
-        public int IdAdopcion;
+        public int IdAdopcion { get; set; }
 
-        public AnimalDTO Animal;
+        public int AnimalId { get; set; }
+        public string NombreAnimal { get; set; }
 
-        public UserDTO RescatistaUser;
+        public int RescatistaUserId { get; set; }
+        public string RescatistaUserNombre { get; set; }
 
-        public UserDTO AdoptanteUser;
+        public int AdoptanteUserId { get; set; }
+        public string AdoptanteUserNombre { get; set; }
 
-        public AdopcionDTO(int idAdopcion, AnimalDTO animal, UserDTO rescatistaUser, UserDTO adoptanteUser)
-        {
-            IdAdopcion = idAdopcion;
-            Animal = animal;
-            RescatistaUser = rescatistaUser;
-            AdoptanteUser = adoptanteUser;
-        }
+
+        //public AdopcionDTO(int idAdopcion, int animalId, int rescatistaUserId, int adoptanteUserId)
+        //{
+        //    IdAdopcion = idAdopcion;
+        //    AnimalId = animalId;
+        //    RescatistaUserId = rescatistaUserId;
+        //    AdoptanteUserId = adoptanteUserId;
+        //}
     }
 
 

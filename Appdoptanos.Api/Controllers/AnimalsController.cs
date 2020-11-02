@@ -35,9 +35,9 @@ namespace Appdoptanos.Api.Controllers
         //Trae todos los animales
         // GET: api/Animals
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Animal>>> GetAnimal()
+        public async Task<ActionResult<IEnumerable<AnimalDTO>>> GetAnimal()
         {
-            var lstAnimalBD = await (from animal in _context.Animal
+            var lstAnimalBd = await (from animal in _context.Animal
                                       select new
                                       {
                                           animal.IdAnimal,
@@ -49,13 +49,12 @@ namespace Appdoptanos.Api.Controllers
                                       }).ToListAsync();
 
             var lstAnimalDTO = new List<AnimalDTO>();
-            foreach (var animalBd in lstAnimalBD)
+            foreach (var animalBd in lstAnimalBd)
                 lstAnimalDTO.Add(AnimalToDTO(animalBd));
             
             if (lstAnimalDTO.Count != 0)
                 return Ok(lstAnimalDTO);
-            else
-                return NotFound("No se encuentran datos");
+            return NotFound("No se encuentran datos");
         }
 
 
@@ -96,7 +95,7 @@ namespace Appdoptanos.Api.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<AnimalDTO>> GetAnimal(int id)
         {
-            var animalBd = await (from animal in _context.Animal
+            var animalModel = await (from animal in _context.Animal
                                   where animal.IdAnimal == id
                                   select new
                                  {
@@ -108,10 +107,10 @@ namespace Appdoptanos.Api.Controllers
                                      animal.Disponibilidad
                                  }).FirstOrDefaultAsync();
 
-            if (animalBd != null)
+            if (animalModel != null)
                 //Transformo la consulta al DTO y lo devuelvo
-                return Ok(AnimalToDTO(animalBd));
-            return NotFound("No hay animales con ese id"); ;
+                return Ok(AnimalToDTO(animalModel));
+            return NotFound("No hay animales con ese id"); 
         }
 
 
@@ -125,7 +124,7 @@ namespace Appdoptanos.Api.Controllers
         public async Task<IActionResult> PutAnimal(int id, AnimalDTO animalDTO)
         {
             if (id != animalDTO.IdAnimal)
-                return BadRequest();
+                return BadRequest("El id es diferente al del animal");
 
             //Busco si el nombre de especie ingresado en el dto a ver si existe
             var especieQuery =
@@ -150,11 +149,7 @@ namespace Appdoptanos.Api.Controllers
                 };
             }
             else
-            {
                 return NotFound("No se encontro la especie ingresada");
-
-            }
-
 
             //Guardo el AnimalModel
             _context.Entry(animalModel).State = EntityState.Modified;
@@ -276,7 +271,6 @@ namespace Appdoptanos.Api.Controllers
 
 
 
-
         private bool AnimalExists(int id)
         {
             return _context.Animal.Any(e => e.IdAnimal == id);
@@ -284,13 +278,13 @@ namespace Appdoptanos.Api.Controllers
 
         private static AnimalDTO AnimalToDTO(dynamic animalBd) =>
              new AnimalDTO
-            {
-                IdAnimal = animalBd.IdAnimal,
-                Nombre = animalBd.Nombre,
-                Color = animalBd.Color,
-                FecNac = animalBd.FecNac,
-                NombreEspecie = animalBd.NombreEspecie,
-                Disponibilidad = animalBd.Disponibilidad
-            };
+             {
+                    IdAnimal        = animalBd.IdAnimal,
+                    Nombre          = animalBd.Nombre,
+                    Color           = animalBd.Color,
+                    FecNac          = animalBd.FecNac,
+                    NombreEspecie   = animalBd.NombreEspecie,
+                    Disponibilidad  = animalBd.Disponibilidad
+             };
     }
 }

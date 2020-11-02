@@ -11,8 +11,10 @@ namespace Appdoptanos.Api.DTOs
 
         public string NombreUser { get; set; }
 
-        public string? Nombre { get; set; }
+        public string Clave { get; set; }
 
+        public string? Nombre { get; set; }
+        
         public string? Apellido { get; set; }
 
         public string Email { get; set; }
@@ -29,5 +31,8 @@ namespace Appdoptanos.Api.DTOs
         public string Provincia { get; set; }
 
         public int? Reputacion { get; set; }
+        
+        public bool PerfilVerificado { get; set; }
+
     }
 }

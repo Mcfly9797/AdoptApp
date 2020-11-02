@@ -43,6 +43,9 @@ namespace Appdoptanos.Api.Models
 
         public string Provincia { get; set; }
 
+        public bool PerfilVerificado { get; set; }
+
+
 
         [Range(0, 5)]
         public int? Reputacion { get; set; }
