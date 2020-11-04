@@ -57,16 +57,29 @@ namespace Appdoptanos.Api.Controllers
 
         // GET: api/Adopcions/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Adopcion>> GetAdopcion(int id)
+        public async Task<ActionResult<AdopcionDTO>> GetAdopcion(int id)
         {
-            var adopcion = await _context.Adopcion.FindAsync(id);
 
-            if (adopcion == null)
-            {
+
+
+            var adopcionBd = await (from adopcion in _context.Adopcion
+                                    where adopcion.IdAdopcion == id
+                                       select new
+                                       {
+                                           IdAdopcion = adopcion.IdAdopcion,
+                                           IdAnimal = adopcion.AnimalId,
+                                           NombreAnimal = adopcion.Animal.Nombre,
+                                           RescatistaUserId = adopcion.AdoptanteUser.IdUser,
+                                           RescatistaUserNombre = adopcion.RescatistaUser.Nombre,
+                                           AdoptanteUserId = adopcion.AdoptanteUser.IdUser,
+                                           AdoptanteUserNombre = adopcion.AdoptanteUser.Nombre
+                                       }).FirstOrDefaultAsync();
+
+
+
+            if (adopcionBd == null)
                 return NotFound();
-            }
-
-            return adopcion;
+            return AdopcionToDTO(adopcionBd);
         }
 
 
@@ -76,14 +89,13 @@ namespace Appdoptanos.Api.Controllers
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutAdopcion(int id, Adopcion adopcion)
+        public async Task<IActionResult> PutAdopcion(int id, AdopcionDTO adopcionDTO)
         {
-            if (id != adopcion.IdAdopcion)
-            {
+            if (id != adopcionDTO.IdAdopcion)
                 return BadRequest();
-            }
 
-            _context.Entry(adopcion).State = EntityState.Modified;
+
+            _context.Entry(AdopcionToModel(adopcionDTO)).State = EntityState.Modified;
 
             try
             {
@@ -92,16 +104,12 @@ namespace Appdoptanos.Api.Controllers
             catch (DbUpdateConcurrencyException)
             {
                 if (!AdopcionExists(id))
-                {
                     return NotFound();
-                }
                 else
-                {
                     throw;
-                }
             }
 
-            return NoContent();
+            return Ok("Elemento modificado correctamente");
         }
 
 
@@ -111,12 +119,11 @@ namespace Appdoptanos.Api.Controllers
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPost]
-        public async Task<ActionResult<Adopcion>> PostAdopcion(Adopcion adopcion)
+        public async Task<ActionResult<Adopcion>> PostAdopcion(AdopcionDTO adopcionDTO)
         {
-            _context.Adopcion.Add(adopcion);
+            _context.Adopcion.Add(AdopcionToModel(adopcionDTO));
             await _context.SaveChangesAsync();
-
-            return CreatedAtAction("GetAdopcion", new { id = adopcion.IdAdopcion }, adopcion);
+            return CreatedAtAction("GetAdopcion", new { id = adopcionDTO.IdAdopcion }, adopcionDTO);
         }
 
 
@@ -128,25 +135,27 @@ namespace Appdoptanos.Api.Controllers
         {
             var adopcion = await _context.Adopcion.FindAsync(id);
             if (adopcion == null)
-            {
                 return NotFound();
-            }
 
             _context.Adopcion.Remove(adopcion);
             await _context.SaveChangesAsync();
 
-            return adopcion;
+            return Ok("Elemento eliminado correctamente");
         }
 
 
 
 
+        //Comprueba que el elemento exista
         private bool AdopcionExists(int id)
         {
             return _context.Adopcion.Any(e => e.IdAdopcion == id);
         }
 
 
+
+
+        //Conversion de Model a DTO
         private static AdopcionDTO AdopcionToDTO(dynamic adopcionBd) =>
              new AdopcionDTO
              {
@@ -161,5 +170,18 @@ namespace Appdoptanos.Api.Controllers
                 AdoptanteUserId = adopcionBd.AdoptanteUserId,
                 AdoptanteUserNombre = adopcionBd.AdoptanteUserNombre
              };
+
+
+
+
+        //Conversion de DTO a Model
+        private static Adopcion AdopcionToModel(dynamic adopcionDTO) =>
+            new Adopcion
+            {
+                IdAdopcion = adopcionDTO.IdAdopcion,
+                AnimalId = adopcionDTO.IdAnimal,
+                RescatistaUser = adopcionDTO.RescatistaUserId,          
+                AdoptanteUser = adopcionDTO.AdoptanteUserId,
+            };
     }
 }

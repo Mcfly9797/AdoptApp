@@ -270,12 +270,15 @@ namespace Appdoptanos.Api.Controllers
 
 
 
-
+        //Comprueba que el elemento exista
         private bool AnimalExists(int id)
         {
             return _context.Animal.Any(e => e.IdAnimal == id);
         }
 
+
+
+        //Conversion de Model a DTO
         private static AnimalDTO AnimalToDTO(dynamic animalBd) =>
              new AnimalDTO
              {
