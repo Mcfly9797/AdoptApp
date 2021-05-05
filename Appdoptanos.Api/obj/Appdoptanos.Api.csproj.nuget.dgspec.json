@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\villarealnah\\Desktop\\Fuentes proyectos propios\\Appdoptanos\\Appdoptanos.Api\\Appdoptanos.Api.csproj": {}
+    "C:\\Repos\\Api appdoptanos\\Appdoptanos.Api\\Appdoptanos.Api.csproj": {}
   },
   "projects": {
-    "C:\\Users\\villarealnah\\Desktop\\Fuentes proyectos propios\\Appdoptanos\\Appdoptanos.Api\\Appdoptanos.Api.csproj": {
+    "C:\\Repos\\Api appdoptanos\\Appdoptanos.Api\\Appdoptanos.Api.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\villarealnah\\Desktop\\Fuentes proyectos propios\\Appdoptanos\\Appdoptanos.Api\\Appdoptanos.Api.csproj",
+        "projectUniqueName": "C:\\Repos\\Api appdoptanos\\Appdoptanos.Api\\Appdoptanos.Api.csproj",
         "projectName": "Appdoptanos.Api",
-        "projectPath": "C:\\Users\\villarealnah\\Desktop\\Fuentes proyectos propios\\Appdoptanos\\Appdoptanos.Api\\Appdoptanos.Api.csproj",
-        "packagesPath": "C:\\Users\\villarealnah\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\villarealnah\\Desktop\\Fuentes proyectos propios\\Appdoptanos\\Appdoptanos.Api\\obj\\",
+        "projectPath": "C:\\Repos\\Api appdoptanos\\Appdoptanos.Api\\Appdoptanos.Api.csproj",
+        "packagesPath": "C:\\Users\\nahuel.s.villarreal\\.nuget\\packages\\",
+        "outputPath": "C:\\Repos\\Api appdoptanos\\Appdoptanos.Api\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\villarealnah\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\nahuel.s.villarreal\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -26,6 +26,7 @@
         },
         "frameworks": {
           "netcoreapp3.1": {
+            "targetAlias": "netcoreapp3.1",
             "projectReferences": {}
           }
         },
@@ -37,10 +38,11 @@
       },
       "frameworks": {
         "netcoreapp3.1": {
+          "targetAlias": "netcoreapp3.1",
           "dependencies": {
             "Microsoft.EntityFrameworkCore": {
               "target": "Package",
-              "version": "[3.1.8, )"
+              "version": "[5.0.5, )"
             },
             "Microsoft.EntityFrameworkCore.SqlServer": {
               "target": "Package",
@@ -48,13 +50,13 @@
             },
             "Microsoft.EntityFrameworkCore.Sqlite": {
               "target": "Package",
-              "version": "[3.1.8, )"
+              "version": "[5.0.5, )"
             },
             "Microsoft.EntityFrameworkCore.Tools": {
               "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
               "suppressParent": "All",
               "target": "Package",
-              "version": "[3.1.8, )"
+              "version": "[5.0.5, )"
             },
             "Microsoft.VisualStudio.Web.CodeGeneration.Design": {
               "target": "Package",
@@ -79,7 +81,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.1.301\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.102\\RuntimeIdentifierGraph.json"
         }
       }
     }
