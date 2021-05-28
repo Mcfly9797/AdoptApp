@@ -1,0 +1,9 @@
+C:\Repos\Api appdoptanos\ServiceLayer\bin\Debug\netcoreapp3.1\ServiceLayer.deps.json
+C:\Repos\Api appdoptanos\ServiceLayer\bin\Debug\netcoreapp3.1\ServiceLayer.dll
+C:\Repos\Api appdoptanos\ServiceLayer\bin\Debug\netcoreapp3.1\ServiceLayer.pdb
+C:\Repos\Api appdoptanos\ServiceLayer\obj\Debug\netcoreapp3.1\ServiceLayer.csprojAssemblyReference.cache
+C:\Repos\Api appdoptanos\ServiceLayer\obj\Debug\netcoreapp3.1\ServiceLayer.AssemblyInfoInputs.cache
+C:\Repos\Api appdoptanos\ServiceLayer\obj\Debug\netcoreapp3.1\ServiceLayer.AssemblyInfo.cs
+C:\Repos\Api appdoptanos\ServiceLayer\obj\Debug\netcoreapp3.1\ServiceLayer.csproj.CoreCompileInputs.cache
+C:\Repos\Api appdoptanos\ServiceLayer\obj\Debug\netcoreapp3.1\ServiceLayer.dll
+C:\Repos\Api appdoptanos\ServiceLayer\obj\Debug\netcoreapp3.1\ServiceLayer.pdb

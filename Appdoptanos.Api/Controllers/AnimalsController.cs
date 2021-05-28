@@ -29,9 +29,6 @@ namespace Appdoptanos.Api.Controllers
             _context = context;
         }
 
-
-
-
         //Trae todos los animales
         // GET: api/Animals
         [HttpGet]
@@ -83,8 +80,7 @@ namespace Appdoptanos.Api.Controllers
 
             if (lstAnimalDTO.Count != 0)
                 return  Ok(lstAnimalDTO);
-            else
-                return NotFound("No hay animales disponibles para adoptar");
+            return NotFound("No hay animales disponibles para adoptar");
         }
 
 

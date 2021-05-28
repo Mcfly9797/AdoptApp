@@ -3,7 +3,6 @@ using System;
 using Appdoptanos.Api.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
-using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Appdoptanos.Api.Migrations
@@ -15,25 +14,22 @@ namespace Appdoptanos.Api.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "3.1.8")
-                .HasAnnotation("Relational:MaxIdentifierLength", 128)
-                .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                .HasAnnotation("ProductVersion", "5.0.5");
 
             modelBuilder.Entity("Appdoptanos.Api.Models.Adopcion", b =>
                 {
                     b.Property<int>("IdAdopcion")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("INTEGER");
 
                     b.Property<int?>("AdoptanteID")
-                        .HasColumnType("int");
+                        .HasColumnType("INTEGER");
 
                     b.Property<int>("AnimalId")
-                        .HasColumnType("int");
+                        .HasColumnType("INTEGER");
 
                     b.Property<int?>("RescatistaID")
-                        .HasColumnType("int");
+                        .HasColumnType("INTEGER");
 
                     b.HasKey("IdAdopcion");
 
@@ -51,27 +47,26 @@ namespace Appdoptanos.Api.Migrations
                 {
                     b.Property<int>("IdAnimal")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("Color")
                         .IsRequired()
-                        .HasColumnType("nvarchar(25)")
-                        .HasMaxLength(25);
+                        .HasMaxLength(25)
+                        .HasColumnType("TEXT");
 
                     b.Property<bool>("Disponibilidad")
-                        .HasColumnType("bit");
+                        .HasColumnType("INTEGER");
 
                     b.Property<int>("EspecieId")
-                        .HasColumnType("int");
+                        .HasColumnType("INTEGER");
 
                     b.Property<DateTime>("FecNac")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("Nombre")
                         .IsRequired()
-                        .HasColumnType("nvarchar(25)")
-                        .HasMaxLength(25);
+                        .HasMaxLength(25)
+                        .HasColumnType("TEXT");
 
                     b.HasKey("IdAnimal");
 
@@ -84,13 +79,12 @@ namespace Appdoptanos.Api.Migrations
                 {
                     b.Property<int>("IdEspecie")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("NombreEspecie")
                         .IsRequired()
-                        .HasColumnType("nvarchar(30)")
-                        .HasMaxLength(30);
+                        .HasMaxLength(30)
+                        .HasColumnType("TEXT");
 
                     b.HasKey("IdEspecie");
 
@@ -101,50 +95,49 @@ namespace Appdoptanos.Api.Migrations
                 {
                     b.Property<int>("IdUser")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("Apellido")
-                        .HasColumnType("nvarchar(50)")
-                        .HasMaxLength(50);
+                        .HasMaxLength(50)
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("Clave")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("TEXT");
 
                     b.Property<int?>("Dni")
-                        .HasColumnType("int")
-                        .HasMaxLength(8);
+                        .HasMaxLength(8)
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("Domicilio")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("Email")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("Localidad")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("Nombre")
-                        .HasColumnType("nvarchar(25)")
-                        .HasMaxLength(25);
+                        .HasMaxLength(25)
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("NombreUser")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("TEXT");
 
                     b.Property<bool>("PerfilVerificado")
-                        .HasColumnType("bit");
+                        .HasColumnType("INTEGER");
 
                     b.Property<int?>("Phone")
-                        .HasColumnType("int");
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("Provincia")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("TEXT");
 
                     b.Property<int?>("Reputacion")
-                        .HasColumnType("int");
+                        .HasColumnType("INTEGER");
 
                     b.HasKey("IdUser");
 
@@ -166,6 +159,12 @@ namespace Appdoptanos.Api.Migrations
                     b.HasOne("Appdoptanos.Api.Models.User", "RescatistaUser")
                         .WithMany("RescatistaUser")
                         .HasForeignKey("RescatistaID");
+
+                    b.Navigation("AdoptanteUser");
+
+                    b.Navigation("Animal");
+
+                    b.Navigation("RescatistaUser");
                 });
 
             modelBuilder.Entity("Appdoptanos.Api.Models.Animal", b =>
@@ -175,6 +174,20 @@ namespace Appdoptanos.Api.Migrations
                         .HasForeignKey("EspecieId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Especie");
+                });
+
+            modelBuilder.Entity("Appdoptanos.Api.Models.Animal", b =>
+                {
+                    b.Navigation("Adopcion");
+                });
+
+            modelBuilder.Entity("Appdoptanos.Api.Models.User", b =>
+                {
+                    b.Navigation("AdoptanteUser");
+
+                    b.Navigation("RescatistaUser");
                 });
 #pragma warning restore 612, 618
         }

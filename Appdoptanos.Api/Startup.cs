@@ -28,9 +28,12 @@ namespace Appdoptanos.Api
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
+            services.AddAuthentication();
+
+
             //Siempre agregar estas dos lineas para preparar la inicializacion con la base de datos, el conexion string esta en appsettings.json
             services.AddDbContext<MyDbContext>(options =>
-                            options.UseSqlServer(Configuration["Data:DefaultConnection:ConnectionString"]));
+                            options.UseSqlite(Configuration["Data:DefaultConnection:ConnectionString"]));
 
         }
 
@@ -45,6 +48,9 @@ namespace Appdoptanos.Api
             app.UseHttpsRedirection();
 
             app.UseRouting();
+
+
+            app.UseAuthentication();
 
             app.UseAuthorization();
 

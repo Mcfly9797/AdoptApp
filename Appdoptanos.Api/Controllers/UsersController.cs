@@ -21,9 +21,6 @@ namespace Appdoptanos.Api.Controllers
             _context = context;
         }
 
-
-
-
         // GET: api/Users
         [HttpGet]
         public async Task<ActionResult<IEnumerable<UserDTO>>> GetUser()

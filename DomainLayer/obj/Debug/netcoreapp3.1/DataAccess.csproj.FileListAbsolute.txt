@@ -1,0 +1,9 @@
+C:\Repos\Api appdoptanos\DomainLayer\bin\Debug\netcoreapp3.1\DataAccess.deps.json
+C:\Repos\Api appdoptanos\DomainLayer\bin\Debug\netcoreapp3.1\DataAccess.dll
+C:\Repos\Api appdoptanos\DomainLayer\bin\Debug\netcoreapp3.1\DataAccess.pdb
+C:\Repos\Api appdoptanos\DomainLayer\obj\Debug\netcoreapp3.1\DataAccess.csprojAssemblyReference.cache
+C:\Repos\Api appdoptanos\DomainLayer\obj\Debug\netcoreapp3.1\DataAccess.AssemblyInfoInputs.cache
+C:\Repos\Api appdoptanos\DomainLayer\obj\Debug\netcoreapp3.1\DataAccess.AssemblyInfo.cs
+C:\Repos\Api appdoptanos\DomainLayer\obj\Debug\netcoreapp3.1\DataAccess.csproj.CoreCompileInputs.cache
+C:\Repos\Api appdoptanos\DomainLayer\obj\Debug\netcoreapp3.1\DataAccess.dll
+C:\Repos\Api appdoptanos\DomainLayer\obj\Debug\netcoreapp3.1\DataAccess.pdb

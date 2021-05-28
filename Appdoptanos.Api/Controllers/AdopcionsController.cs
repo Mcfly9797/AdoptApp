@@ -29,19 +29,19 @@ namespace Appdoptanos.Api.Controllers
         public async Task<ActionResult<IEnumerable<AdopcionDTO>>> GetAdopcion()
         {
 
-            //var lstAdopcionBd = await _context.Adopcion.ToListAsync();
-            
-            var lstAdopcionBd = await (from adopcion in _context.Adopcion
-                    select new
-                    {
-                        IdAdopcion = adopcion.IdAdopcion,
-                        IdAnimal = adopcion.AnimalId,
-                        NombreAnimal = adopcion.Animal.Nombre,
-                        RescatistaUserId = adopcion.AdoptanteUser.IdUser,
-                        RescatistaUserNombre = adopcion.RescatistaUser.Nombre,
-                        AdoptanteUserId = adopcion.AdoptanteUser.IdUser,
-                        AdoptanteUserNombre = adopcion.AdoptanteUser.Nombre
-                    }).ToListAsync();
+            var lstAdopcionBd = await _context.Adopcion.ToListAsync();
+
+            //var lstAdopcionBd = await (from adopcion in _context.Adopcion
+            //                           select new
+            //                           {
+            //                               IdAdopcion = adopcion.IdAdopcion,
+            //                               IdAnimal = adopcion.AnimalId,
+            //                               NombreAnimal = adopcion.Animal.Nombre,
+            //                               RescatistaUserId = adopcion.AdoptanteUser.IdUser,
+            //                               RescatistaUserNombre = adopcion.RescatistaUser.Nombre,
+            //                               AdoptanteUserId = adopcion.AdoptanteUser.IdUser,
+            //                               AdoptanteUserNombre = adopcion.AdoptanteUser.Nombre
+            //                           }).ToListAsync();
 
             var lstAdopcionDTO = new List<AdopcionDTO>();
             foreach (var adopcionBd in lstAdopcionBd)
@@ -62,12 +62,12 @@ namespace Appdoptanos.Api.Controllers
 
 
 
-            var adopcionBd = await (from adopcion in _context.Adopcion
+            var adopcionDTO = await (from adopcion in _context.Adopcion
                                     where adopcion.IdAdopcion == id
-                                       select new
+                                       select new AdopcionDTO
                                        {
                                            IdAdopcion = adopcion.IdAdopcion,
-                                           IdAnimal = adopcion.AnimalId,
+                                           AnimalId = adopcion.AnimalId,
                                            NombreAnimal = adopcion.Animal.Nombre,
                                            RescatistaUserId = adopcion.AdoptanteUser.IdUser,
                                            RescatistaUserNombre = adopcion.RescatistaUser.Nombre,
@@ -77,10 +77,11 @@ namespace Appdoptanos.Api.Controllers
 
 
 
-            if (adopcionBd == null)
+            if (adopcionDTO == null)
                 return NotFound();
-            return AdopcionToDTO(adopcionBd);
+            return AdopcionToDTO(adopcionDTO);
         }
+
 
 
 
@@ -119,11 +120,11 @@ namespace Appdoptanos.Api.Controllers
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPost]
-        public async Task<ActionResult<Adopcion>> PostAdopcion(AdopcionDTO adopcionDTO)
+        public async Task<ActionResult<Adopcion>> PostAdopcion(Adopcion adopcion)
         {
-            _context.Adopcion.Add(AdopcionToModel(adopcionDTO));
+            _context.Adopcion.Add((adopcion));
             await _context.SaveChangesAsync();
-            return CreatedAtAction("GetAdopcion", new { id = adopcionDTO.IdAdopcion }, adopcionDTO);
+            return CreatedAtAction("GetAdopcion", new { id = adopcion.IdAdopcion }, adopcion);
         }
 
 
